@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Minecraft - Web Edition 3D</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟩</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- ======================================================================
+         1. AUTHENTIC MINECRAFT TITLE / MAIN MENU SCREEN
+         ====================================================================== -->
+    <div id="start-screen">
+      <div class="dirt-menu-overlay"></div>
+      <div class="logo-wrapper">
+        <div class="mc-title-3d">
+          <span class="mc-logo-letter">M</span>
+          <span class="mc-logo-letter">I</span>
+          <span class="mc-logo-letter">N</span>
+          <span class="mc-logo-letter">E</span>
+          <span class="mc-logo-letter">C</span>
+          <span class="mc-logo-letter">R</span>
+          <span class="mc-logo-letter">A</span>
+          <span class="mc-logo-letter">F</span>
+          <span class="mc-logo-letter">T</span>
+        </div>
+        <div class="mc-edition-subtitle">WEB EDITION 1.20 // OFFICIAL VOXEL SANDBOX</div>
+        <div id="splash-text" class="splash-text">Now in WebGL!</div>
+      </div>
+
+      <!-- Main Menu Buttons Stack -->
+      <div class="menu-button-stack">
+        <button id="btn-singleplayer" class="mc-btn primary-menu-btn">▶ Play World (Adventure &amp; Building)</button>
+        <div class="menu-btn-row">
+          <button id="btn-open-rules" class="mc-btn half-menu-btn">Game Rules &amp; Modes</button>
+          <button id="btn-open-options" class="mc-btn half-menu-btn">Options...</button>
+        </div>
+        <button id="btn-open-castle-menu" class="mc-btn primary-menu-btn">🏰 Castle Blueprint Workshop</button>
+      </div>
+
+      <div class="menu-copyright-info">
+        <span>Minecraft Web 1.20 (WebGL)</span>
+        <span>Recreated based on Minecraft.net official specs</span>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         2. WORLD CREATION & GAME RULES MODAL
+         ====================================================================== -->
+    <div id="world-modal" class="mc-dialog-modal">
+      <div class="mc-dialog-card">
+        <div class="dialog-title">Create World &amp; Game Rules</div>
+
+        <div class="dialog-section">
+          <label class="dialog-label">World Name:</label>
+          <input type="text" id="input-world-name" class="mc-text-input" value="New World" maxlength="24">
+        </div>
+
+        <!-- Game Mode Toggle Button -->
+        <div class="dialog-section">
+          <button id="btn-toggle-gamemode" class="mc-btn full-btn">Game Mode: Survival</button>
+          <div id="gamemode-desc" class="mode-description">
+            Search for resources, craft tools, gain levels, health and hunger.
+          </div>
+        </div>
+
+        <!-- Difficulty Toggle Button -->
+        <div class="dialog-section">
+          <button id="btn-toggle-difficulty" class="mc-btn full-btn">Difficulty: Normal</button>
+          <div id="difficulty-desc" class="mode-description">
+            Hostile mobs spawn at night; starvation damage stops at 1 heart.
+          </div>
+        </div>
+
+        <!-- Game Rules Toggles -->
+        <div class="game-rules-grid">
+          <button id="rule-daylight" class="mc-btn rule-toggle-btn active">Daylight Cycle: ON</button>
+          <button id="rule-keepinventory" class="mc-btn rule-toggle-btn">Keep Inventory: OFF</button>
+          <button id="rule-regen" class="mc-btn rule-toggle-btn active">Natural Regen: ON</button>
+          <button id="rule-mobs" class="mc-btn rule-toggle-btn active">Mob Spawning: ON</button>
+          <button id="rule-falldamage" class="mc-btn rule-toggle-btn active">Fall Damage: ON</button>
+          <button id="rule-ao" class="mc-btn rule-toggle-btn active">Smooth Lighting: ON</button>
+        </div>
+
+        <div class="dialog-actions-row">
+          <button id="btn-create-world-confirm" class="mc-btn half-menu-btn action-confirm">Create New World</button>
+          <button id="btn-close-world-modal" class="mc-btn half-menu-btn action-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         3. OPTIONS / SETTINGS MODAL
+         ====================================================================== -->
+    <div id="options-modal" class="mc-dialog-modal">
+      <div class="mc-dialog-card">
+        <div class="dialog-title">Options &amp; Video Settings</div>
+
+        <div class="options-sliders-grid">
+          <div class="option-slider-row">
+            <span id="label-fov">FOV: 72 (Normal)</span>
+            <input type="range" id="slider-fov" min="50" max="110" value="72" class="mc-slider">
+          </div>
+
+          <div class="option-slider-row">
+            <span id="label-render-distance">Render Distance: 4 Chunks</span>
+            <input type="range" id="slider-render-dist" min="2" max="8" value="4" class="mc-slider">
+          </div>
+
+          <div class="option-slider-row">
+            <span id="label-master-volume">Master Volume: 80%</span>
+            <input type="range" id="slider-master-volume" min="0" max="100" value="80" class="mc-slider">
+          </div>
+
+          <div class="option-slider-row">
+            <span id="label-music-volume">Music Volume: 40%</span>
+            <input type="range" id="slider-music-volume" min="0" max="100" value="40" class="mc-slider">
+          </div>
+        </div>
+
+        <div class="dialog-actions-row" style="margin-top: 25px;">
+          <button id="btn-close-options" class="mc-btn primary-menu-btn">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         4. IN-GAME PAUSE MENU (Esc - Game Menu)
+         ====================================================================== -->
+    <div id="pause-modal" class="mc-dialog-modal">
+      <div class="mc-dialog-card pause-card">
+        <div class="dialog-title">Game Menu</div>
+        <div class="menu-button-stack">
+          <button id="btn-resume-game" class="mc-btn primary-menu-btn">Back to Game</button>
+          <div class="menu-btn-row">
+            <button id="btn-quick-switch-mode" class="mc-btn half-menu-btn">Mode: Survival</button>
+            <button id="btn-pause-options" class="mc-btn half-menu-btn">Options...</button>
+          </div>
+          <button id="btn-pause-castle" class="mc-btn primary-menu-btn">🏰 Castle Blueprints (C)</button>
+          <button id="btn-quit-to-title" class="mc-btn primary-menu-btn action-danger">Save and Quit to Title</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         5. DEATH SCREEN ("You Died!" / "Game Over!")
+         ====================================================================== -->
+    <div id="death-modal" class="mc-dialog-modal">
+      <div class="death-overlay">
+        <div id="death-title" class="death-title">You Died!</div>
+        <div id="death-score" class="death-score">Score: 7</div>
+        <div class="death-buttons-stack">
+          <button id="btn-respawn" class="mc-btn primary-menu-btn">Respawn</button>
+          <button id="btn-death-title" class="mc-btn primary-menu-btn">Title Screen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Damage Flash Vignette -->
+    <div id="damage-flash"></div>
+
+    <!-- 3D WebGL Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Center Crosshair (+) -->
+    <div id="crosshair">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
+        <line x1="12" y1="3" x2="12" y2="21" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+      </svg>
+    </div>
+
+    <!-- Popup Notice -->
+    <div id="popup-notice">CASTLE BUILT!</div>
+
+    <!-- Advancement Toast Notification -->
+    <div id="advancement-toast">
+      <div class="advancement-icon">🏆</div>
+      <div class="advancement-text">
+        <div class="advancement-header">Advancement Made!</div>
+        <div id="advancement-title" class="advancement-name">Taking Inventory</div>
+      </div>
+    </div>
+
+    <!-- F3 Debug Screen Overlay -->
+    <div id="debug-screen">
+      <div id="debug-info-text">
+        Minecraft Web 1.20 (WebGL)<br>
+        XYZ: 0.00 / 22.00 / 0.00<br>
+        Chunk: [0, 0]<br>
+        Biome: Plains &amp; Rolling Hills
+      </div>
+    </div>
+
+    <!-- Mac Trackpad & Keyboard Controls Banner -->
+    <div id="controls-hint-bar" class="controls-hint-bar">
+      <span class="ctrl-chip"><kbd>F</kbd> Mine / Attack</span>
+      <span class="ctrl-chip"><kbd>R</kbd> Place / Eat</span>
+      <span class="ctrl-chip"><kbd>Q</kbd> Pick Block</span>
+      <span class="ctrl-chip"><kbd>C</kbd> Castle Blueprints</span>
+      <span class="ctrl-chip"><kbd>E</kbd> Inventory</span>
+      <span class="ctrl-chip"><kbd>Space x2</kbd> Flight</span>
+    </div>
+
+    <!-- ======================================================================
+         6. AUTHENTIC MINECRAFT HUD (Hearts, Drumsticks, Bubbles, XP, Hotbar)
+         ====================================================================== -->
+    <div id="hud-container">
+      <!-- Active Item Name Tooltip -->
+      <div id="hotbar-item-name">Stone Bricks</div>
+
+      <!-- Oxygen Air Bubbles (Submerged Swimming) -->
+      <div id="bubbles-container" class="bubbles-wrap"></div>
+
+      <!-- Health Hearts & Food Drumsticks -->
+      <div class="status-row">
+        <div id="hearts-container" class="hearts-wrap"></div>
+        <div id="hunger-container" class="hunger-wrap"></div>
+      </div>
+
+      <!-- Experience Bar & Level Counter -->
+      <div class="xp-bar-wrap">
+        <div class="xp-bar-fill"></div>
+        <div class="xp-level-badge">7</div>
+      </div>
+
+      <!-- 9-Slot Hotbar Strip -->
+      <div class="hotbar-container">
+        <div class="hotbar-slot selected" data-index="0">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="1">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="2">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="3">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="4">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="5">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="6">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="7">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+        <div class="hotbar-slot" data-index="8">
+          <canvas width="36" height="36"></canvas>
+          <span class="slot-count">64</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         7. INVENTORY & CRAFTING GUI MODAL (E)
+         ====================================================================== -->
+    <div id="inventory-modal" class="mc-modal">
+      <div class="inventory-card">
+        <div class="modal-header">
+          <span>🎒 Survival &amp; Creative Inventory</span>
+          <button class="btn-close-modal" onclick="window.mcGame.toggleInventory()">&times;</button>
+        </div>
+        <div class="inventory-hint-text">Click any slot to equip a 64x stack directly to your active hand:</div>
+
+        <!-- 27 Main Inventory Slots -->
+        <div class="inventory-label">Main Survival Inventory (27 Slots):</div>
+        <div class="inventory-grid-9x3" id="inventory-grid-slots"></div>
+
+        <!-- Hotbar 9-slot clone strip -->
+        <div class="inventory-label">Hotbar Strip (Click slot to select active):</div>
+        <div class="hotbar-strip-9" id="inventory-hotbar-slots"></div>
+
+        <!-- Creative Item & Block Catalog -->
+        <div class="catalog-section">
+          <div class="catalog-header-row">
+            <span class="inventory-label">Creative Item Catalog:</span>
+            <div class="catalog-filter-tabs">
+              <button class="tab-btn active" data-filter="all">All</button>
+              <button class="tab-btn" data-filter="building">Blocks</button>
+              <button class="tab-btn" data-filter="furniture">Furniture</button>
+              <button class="tab-btn" data-filter="tools">Tools</button>
+              <button class="tab-btn" data-filter="food">Food</button>
+              <button class="tab-btn" data-filter="wool">Wool</button>
+            </div>
+          </div>
+          <div class="catalog-scroll-grid" id="catalog-grid-slots"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         8. CASTLE ARCHITECT BLUEPRINT MODAL (C)
+         ====================================================================== -->
+    <div id="castle-modal" class="mc-modal">
+      <div class="castle-card">
+        <div class="modal-header">
+          <span>🏰 Castle Architect - Blueprint Workshop</span>
+          <button class="btn-close-modal" onclick="window.mcGame.toggleCastleMenu()">&times;</button>
+        </div>
+        <div style="font-size: 16px; color: #333; margin-bottom: 8px;">
+          Choose a medieval structure blueprint to construct into your voxel world:
+        </div>
+
+        <div class="castle-blueprints-grid">
+          <button id="btn-build-castle" class="blueprint-btn">
+            <span class="blueprint-icon">🏰</span>
+            <span class="blueprint-title">Grand Fortress Castle</span>
+            <span class="blueprint-desc">4 corner watchtowers, fortified walls, throne keep &amp; water fountain</span>
+          </button>
+
+          <button id="btn-build-tower" class="blueprint-btn">
+            <span class="blueprint-icon">🗼</span>
+            <span class="blueprint-title">Fortified Watchtower</span>
+            <span class="blueprint-desc">Circular stone brick tower with crenellations, arrow slits &amp; flag</span>
+          </button>
+
+          <button id="btn-build-throne" class="blueprint-btn">
+            <span class="blueprint-icon">👑</span>
+            <span class="blueprint-title">Royal Throne Hall</span>
+            <span class="blueprint-desc">Cathedral arched hall with red carpet, stone pillars &amp; golden throne</span>
+          </button>
+
+          <button class="blueprint-btn" onclick="window.mcGame.isFlying = !window.mcGame.isFlying; window.mcGame.toggleCastleMenu(); window.mcGame.showPopupNotice(window.mcGame.isFlying ? 'CREATIVE FLIGHT ON' : 'CREATIVE FLIGHT OFF');">
+            <span class="blueprint-icon">🪽</span>
+            <span class="blueprint-title">Creative Flight Mode</span>
+            <span class="blueprint-desc">Fly freely to build high castle battlements and towers (Space / Shift)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js Local Build -->
+  <script src="three.min.js"></script>
+
+  <!-- Modular Minecraft Architecture -->
+  <script src="textures.js"></script>
+  <script src="blocks.js"></script>
+  <script src="audio.js"></script>
+  <script src="world.js"></script>
+  <script src="animals.js"></script>
+  <script src="character.js"></script>
+  <script src="castle.js"></script>
+  <script src="game.js"></script>
+
+  <!-- Bootstrap Initialization -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.mcGame = new MinecraftGame();
+    });
+  </script>
+</body>
+</html>
